@@ -1,0 +1,504 @@
+
+:root {
+  --background: #17152B;
+  --card: #F8F7FC;
+  --primary: #8B5CF6;
+  --primary-hover: #7C3AED;
+  --accent: #FBBF24;
+  --text-dark: #24213D;
+  --text-light: #F8FAFC;
+  --muted: #A5A0BC;
+  --border: #DED9EA;
+  --danger: #DC2626;
+}
+
+/* GENERAL RESET */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: var(--background);
+  color: var(--text-light);
+  font-family: 'Inter', sans-serif;
+}
+
+/* MAIN LAYOUT */
+
+main {
+  min-height: 85vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 16px;
+}
+
+h1 {
+  font-size: clamp(1.7rem, 5vw, 2.5rem);
+  margin-bottom: 35px;
+  letter-spacing: -1px;
+  text-align: center;
+}
+
+/* TODO APP */
+
+.todo-app {
+  background: var(--card);
+  color: var(--text-dark);
+  width: min(100%, 420px);
+  height: 100px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* EXPAND WHEN FORM OR TASKS EXIST */
+
+.todo-app:has(#task-form:not(.hidden)),
+.todo-app:has(#tasks-container:not(:empty)) {
+  height: 450px;
+}
+
+/* BUTTONS */
+
+.btn {
+  cursor: pointer;
+  max-width: 100%;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  background: var(--primary);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: background 0.2s ease,
+              transform 0.2s ease;
+}
+
+.btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.large-btn {
+  width: 100%;
+  font-size: 1rem;
+}
+
+/* TASK FORM */
+
+.task-form {
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--card);
+  color: var(--text-dark);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  padding: 18px;
+  width: min(92%, 400px);
+  height: min(430px, 95%);
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto;
+  z-index: 5;
+}
+
+.task-form-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.close-task-form-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.close-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.task-form-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-form-label {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+#title-input,
+#date-input,
+#description-input {
+  width: 100%;
+  min-width: 0;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #D8D3E5;
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 16px;
+  outline: none;
+}
+
+#title-input:focus,
+#date-input:focus,
+#description-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+}
+
+#description-input {
+  resize: vertical;
+}
+
+.task-form-footer {
+  display: flex;
+  justify-content: center;
+}
+
+/* CONFIRMATION DIALOG */
+
+#confirm-close-dialog {
+  width: min(90%, 350px);
+  padding: 20px;
+  margin: auto;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--text-dark);
+}
+
+#confirm-close-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.discard-message-text {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.confirm-close-dialog-btn-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+  flex-wrap: wrap;
+}
+
+/* TASK CONTAINER */
+
+#tasks-container {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow-y: auto;
+  padding-right: 3px;
+}
+
+/* INDIVIDUAL TASKS */
+
+.task {
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+.task:hover {
+  border-color: var(--primary);
+  box-shadow: 0 3px 12px rgba(139, 92, 246, 0.08);
+}
+
+.task-header {
+  border-bottom: 1px solid #ECE9F2;
+  padding-bottom: 9px;
+  margin-bottom: 10px;
+}
+
+.task-header h3 {
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+
+.task p {
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+
+.task-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: #77718A;
+  margin-bottom: 8px;
+}
+
+.task-description {
+  font-size: 0.9rem;
+  color: #49445D;
+}
+
+/* TASK ACTION BUTTONS */
+
+.task-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.task-actions .btn {
+  width: auto;
+  min-width: 65px;
+  padding: 7px 12px;
+  font-size: 0.82rem;
+}
+
+.edit-btn {
+  background: #EDE9FE;
+  color: #6D28D9;
+}
+
+.edit-btn:hover {
+  background: #DDD6FE;
+}
+
+.delete-btn {
+  background: #FEE2E2;
+  color: #B91C1C;
+}
+
+.delete-btn:hover {
+  background: #FECACA;
+}
+
+/* HIDDEN ELEMENTS */
+
+.hidden {
+  display: none !important;
+}
+
+/* FOOTER */
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 20px 15px;
+  color: var(--muted);
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: var(--primary);
+}
+
+/* TABLET AND DESKTOP */
+
+@media (min-width: 576px) {
+  .todo-app {
+    width: 400px;
+  }
+
+  .task-form {
+    width: 370px;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 480px) {
+  main {
+    padding: 24px 12px;
+  }
+
+  h1 {
+    margin-bottom: 25px;
+  }
+
+  .todo-app {
+    padding: 14px;
+  }
+
+  .task-form {
+    width: calc(100% - 12px);
+    padding: 14px;
+  }
+
+  .task {
+    padding: 11px;
+  }
+
+  .task-actions {
+    justify-content: stretch;
+  }
+
+  .task-actions .btn {
+    flex: 1;
+  }
+
+  footer {
+    margin-top: 15px;
+  }
+}
+
+/* TOUCH DEVICES */
+
+@media (hover: none) {
+  .btn:hover {
+    transform: none;
+  }
+
+  .task:hover {
+    box-shadow: none;
+  }
+}
+.app-heading {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.app-heading h1 {
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  font-weight: 400;
+}
+.app-heading h1 {
+  color: #F8FAFC;
+  font-weight: 700;
+  letter-spacing: -1.5px;
+}
+
+.subtitle {
+  color: #A5A0BC;
+  font-size: 0.95rem;
+  letter-spacing: 0.8px;
+}
+
+.todo-app {
+  border: 1px solid #D8D1E8;
+  border-radius: 20px;
+  padding: 18px;
+}
+
+.large-btn {
+  min-height: 54px;
+  border-radius: 12px;
+  letter-spacing: 0.2px;
+}
+.task-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  color: #8B5CF6;
+  padding: 5px 2px;
+  margin-top: 5px;
+  margin-bottom: -5px;
+}
+/* TASK COMPLETION */
+
+.complete-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  font-size: 0.85rem;
+  color: #77718A;
+  cursor: pointer;
+}
+
+.complete-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+/* COMPLETED TASK APPEARANCE */
+
+.task.completed {
+  background: #F1EFF8;
+  border-color: #C4B5FD;
+}
+
+.task.completed .task-header h3 {
+  text-decoration: line-through;
+  color: #9690A8;
+}
+
+.task.completed .task-description {
+  color: #9690A8;
+}
+
+.task.completed .task-date {
+  opacity: 0.6;
+}
+#date-input {
+  background: #FFFFFF;
+  border: 1px solid #D8D3E5;
+  border-radius: 8px;
+  padding: 10px;
+  font-family: 'Inter', sans-serif;
+  color: var(--text-dark);
+  cursor: pointer;
+}
+
+#date-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+#date-input::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
